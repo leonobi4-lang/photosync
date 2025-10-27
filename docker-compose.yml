@@ -12,7 +12,8 @@ services:
       - /volume1/media/photos/sorted:/sorted
       - ./cache:/app
       - ./logs:/logs
-    working_dir: /app
+      /volume1/docker/photosync/root_home
+      working_dir: /app
     command: >
       sh -c "
         mkdir -p /app /logs &&
@@ -21,3 +22,4 @@ services:
       "
     env_file:
       - .env
+
