@@ -10,8 +10,8 @@ services:
     volumes:
       - /volume1/media/photos/duplicates:/duplicates
       - /volume1/media/photos/sorted:/sorted
-      - ./cache:/app
-      - ./logs:/logs
+      - /volume1/docker/photosync_cache:/app
+      - /volume1/docker/photosync_logs:/logs
     working_dir: /app
     command: >
       sh -c "
@@ -21,3 +21,4 @@ services:
       "
     env_file:
       - .env
+
