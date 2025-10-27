@@ -12,7 +12,7 @@ services:
       - /volume1/media/photos/sorted:/sorted
       - ./cache:/app
       - ./logs:/logs
-      /volume1/docker/photosync/root_home
+      - /volume1/docker/photosync/root_home
       working_dir: /app
     command: >
       sh -c "
@@ -22,5 +22,6 @@ services:
       "
     env_file:
       - .env
+
 
 
