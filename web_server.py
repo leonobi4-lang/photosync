@@ -9,8 +9,8 @@ from datetime import datetime
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-LOG_FILE = "/logs/sync.log"
-HASH_FILE = "/app/hash_cache.json"
+LOG_FILE = "/app/logs/sync.log"
+HASH_FILE = "/app/cache/hash_cache.json"
 SYNC_SCRIPT = "sync_photos_fast.py"
 
 def run_sync(dry_run=False):
@@ -58,4 +58,5 @@ def status():
     return jsonify(stats)
 
 if __name__ == "__main__":
+
     app.run(host="0.0.0.0", port=5000, threaded=True)
