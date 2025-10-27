@@ -6,22 +6,18 @@ services:
     container_name: photosync
     restart: unless-stopped
     ports:
-      - "8500:5000"  # ← Новый порт
+      - "8500:5000"
     volumes:
       - /volume1/media/photos/duplicates:/duplicates
       - /volume1/media/photos/sorted:/sorted
       - ./cache:/app
       - ./logs:/logs
-      - /volume1/docker/photosync/root_home
-      working_dir: /app
+    working_dir: /app
     command: >
       sh -c "
         mkdir -p /app /logs &&
-        pip install --user --no-cache-dir xxhash tqdm pillow flask
+        pip install --no-cache-dir --break-system-packages xxhash tqdm pillow flask &&
         python web_server.py
       "
     env_file:
       - .env
-
-
-
