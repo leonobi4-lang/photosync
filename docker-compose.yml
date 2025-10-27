@@ -17,9 +17,10 @@ services:
     command: >
       sh -c "
         mkdir -p /app /logs &&
-        pip install xxhash tqdm pillow flask --no-cache-dir &&
+        pip install --user --no-cache-dir xxhash tqdm pillow flask
         python web_server.py
       "
     env_file:
       - .env
+
 
