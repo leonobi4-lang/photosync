@@ -6,7 +6,7 @@ services:
     container_name: photosync
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "8500:5000"
     volumes:
       # Реальные папки с фото
       - /volume1/media/photos/duplicates:/duplicates
@@ -23,4 +23,5 @@ services:
     env_file:
       - .env
     # Права доступа (важно для Synology)
+
     user: "1000:1000"  # или оставь root, если нужно
