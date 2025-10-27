@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PhotoSync</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>PhotoSync</h1>
+    <div class="card">
+      <h3>Запуск</h3>
+      <label><input type="checkbox" id="dry-run"/> DRY-RUN</label>
+      <button id="start-btn">Запустить</button>
+      <p id="status">Готов</p>
+    </div>
+    <div class="card">
+      <h3>Логи</h3>
+      <pre id="logs">Ожидание...</pre>
+    </div>
+    <div class="card">
+      <h3>Статистика</h3>
+      <p>Файлов в кэше: <span id="files">—</span></p>
+    </div>
+  </div>
+
+  <script>
+    const logsEl = document.getElementById("logs");
+    const statusEl = document.getElementById("status");
+    const startBtn = document.getElementById("start-btn");
+    const dryRun = document.getElementById("dry-run");
+
+    const es = new EventSource("/logs");
+    es.onmessage = e => {
+      logsEl.textContent += e.data;
+      logsEl.scrollTop = logsEl.scrollHeight;
+    };
+
+    startBtn.onclick = () => {
+      startBtn.disabled = true;
+      statusEl.textContent = "Запуск...";
+      fetch("/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dry_run: dryRun.checked })
+      }).then(() => {
+        statusEl.textContent = dryRun.checked ? "DRY-RUN запущен" : "Идёт синхронизация...";
+      });
+    };
+
+    setInterval(() => {
+      fetch("/status").then(r => r.json()).then(d => {
+        document.getElementById("files").textContent = d.files;
+      });
+    }, 5000);
+  </script>
+</body>
+</html>

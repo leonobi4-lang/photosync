@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  photosync:
+    image: python:3.11-slim
+    container_name: photosync
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      # Реальные папки с фото
+      - /volume1/media/photos/duplicates:/duplicates
+      - /volume1/media/photos/sorted:/sorted
+      # Кэш и логи — в этой же папке
+      - ./cache:/app
+      - ./logs:/logs
+    working_dir: /app
+    command: >
+      sh -c "
+        pip install xxhash tqdm pillow flask --no-cache-dir &&
+        python web_server.py
+      "
+    env_file:
+      - .env
+    # Права доступа (важно для Synology)
+    user: "1000:1000"  # или оставь root, если нужно
