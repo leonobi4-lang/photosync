@@ -6,23 +6,18 @@ services:
     container_name: photosync
     restart: unless-stopped
     ports:
-      - "8500:5000"
+      - "8500:5000"  # ← Новый порт
     volumes:
-      # Реальные папки с фото
       - /volume1/media/photos/duplicates:/duplicates
       - /volume1/media/photos/sorted:/sorted
-      # Кэш и логи — в этой же папке
-      - /volume1/docker/photosync_cache:/app   
-      - /volume1/docker/photosync_logs:/logs   
+      - ./cache:/app
+      - ./logs:/logs
     working_dir: /app
     command: >
       sh -c "
+        mkdir -p /app /logs &&
         pip install xxhash tqdm pillow flask --no-cache-dir &&
         python web_server.py
       "
     env_file:
       - .env
-    # Права доступа (важно для Synology)
-
-    user: "1000:1000"  # или оставь root, если нужно
-
